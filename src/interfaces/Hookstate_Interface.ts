@@ -10,6 +10,7 @@ export default function useHookstateGetters() {
   // SCENE STATE
   const environmentLoaded = () => sceneState.environmentLoaded.get({ noproxy: true });
   const environmentSelected = () => sceneState.selectedEnvironment.get({ noproxy: true });
+  const avatarSelected = () => sceneState.selectedAvatar.get({ noproxy: true });
   const sceneLoaded = () => sceneState.sceneLoaded.get({ noproxy: true });
   const gameRunning = () => sceneState.gameRunning.get({ noproxy: true });
   const setGameRunning = (value: boolean) => {
@@ -55,6 +56,7 @@ export default function useHookstateGetters() {
   return {
     environmentLoaded,
     environmentSelected,
+    avatarSelected,
     sceneLoaded,
     gameRunning,
     setGameRunning,
