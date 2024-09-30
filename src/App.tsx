@@ -13,6 +13,10 @@ import { Physics } from '@react-three/cannon';
 import AvatarHandColliders from './components/physics/AvatarHandColliders';
 import { Bubbles } from './ecs/entities/Bubbles';
 
+
+// THINGS TO NOTE FOR NEXT TIME - We can follow these performance tips to re-design the next game
+// https://r3f.docs.pmnd.rs/advanced/pitfalls
+
 import './css/App.css';
 
 const Renderer = lazy(() => import('./canvas/Renderer'));
@@ -21,6 +25,7 @@ const Avatar = lazy(() => import('./components/Avatar'));
 
 export default function App() {
   const {
+    avatarSelected,
     environmentLoaded,
     environmentSelected,
     sceneLoaded,
@@ -39,11 +44,7 @@ export default function App() {
 
   useLayoutEffect(() => {
     if (avatar.current && holisticLoaded && environmentLoaded()) {
-      const transitionDelay = setTimeout(() => {
-        sceneState.sceneLoaded.set(true);
-      }, 2000); // delay to see avatar in calibration before camera spins around and countdown starts.
-
-      return () => clearTimeout(transitionDelay);
+      sceneState.sceneLoaded.set(true);
     }
   }, [holisticLoaded, environmentLoaded]);
 
@@ -57,7 +58,13 @@ export default function App() {
       <Suspense fallback={null}>
         <Renderer>
           {environmentSelected() && <Environment selected={environmentSelected()}/>}
-          {getSettingsReady() && <Avatar setAvatarModel={setAvatarModel} avatar={avatar} />}
+          {getSettingsReady() &&
+            <Avatar
+              setAvatarModel={setAvatarModel}
+              avatar={avatar}
+              avatarSelected={avatarSelected()}
+            />
+          }
           <CameraAnimations />
           {sceneLoaded() && !gameOver() && (
             <>
@@ -68,7 +75,6 @@ export default function App() {
               <GameLogic avatar={avatar} />
             </>
           )}
-
           <Preload all />
         </Renderer>
       </Suspense>
